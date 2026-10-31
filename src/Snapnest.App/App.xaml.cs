@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Snapnest.Infrastructure.Data;
 using Snapnest.App.ViewModels;
+using Snapnest.Application.Interfaces;
+using Snapnest.Infrastructure.Services;
 
 namespace Snapnest.App;
 
@@ -27,10 +29,11 @@ public partial class App : System.Windows.Application
 
                 services.AddDbContext<SnapnestDbContext>(options => { options.UseSqlite($"Data Source={dbPath}"); });
 
+                services.AddScoped<IClotheslineService, ClotheslineService>();
+
                 services.AddSingleton<MainViewModel>();
                 services.AddTransient<HomeViewModel>();
                 services.AddTransient<ClotheslinesViewModel>();
-
                 services.AddTransient<MainWindow>();
             }).Build();
     }
@@ -38,11 +41,13 @@ public partial class App : System.Windows.Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         await _host.StartAsync();
+
         using (var scope = _host.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<SnapnestDbContext>();
-            dbContext.Database.EnsureCreated();
+            await dbContext.Database.MigrateAsync();
         }
+
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
         base.OnStartup(e);
