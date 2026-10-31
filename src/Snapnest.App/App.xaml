@@ -1,7 +1,20 @@
 ﻿<Application x:Class="Snapnest.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Snapnest.App">
+             xmlns:viewmodels="clr-namespace:Snapnest.App.ViewModels"
+             xmlns:views="clr-namespace:Snapnest.App.Views">
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ClotheslinesViewModel}">
+                <views:ClotheslinesView />
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
