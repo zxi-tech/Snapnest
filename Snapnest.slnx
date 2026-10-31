@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Snapnest.App/Snapnest.App.csproj" />
+    <Project Path="src/Snapnest.Application/Snapnest.Application.csproj" />
+    <Project Path="src/Snapnest.Core/Snapnest.Core.csproj" />
+    <Project Path="src/Snapnest.Infrastructure/Snapnest.Infrastructure.csproj" />
+  </Folder>
+</Solution>
