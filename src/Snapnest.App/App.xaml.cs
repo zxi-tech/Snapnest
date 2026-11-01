@@ -31,6 +31,8 @@ public partial class App : System.Windows.Application
 
                 services.AddScoped<IClotheslineService, ClotheslineService>();
 
+                services.AddScoped<IImageService, ImageService>();
+
                 services.AddSingleton<MainViewModel>();
                 services.AddTransient<HomeViewModel>();
                 services.AddTransient<ClotheslinesViewModel>();

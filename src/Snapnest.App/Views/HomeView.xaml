@@ -1,7 +1,77 @@
 <UserControl x:Class="Snapnest.App.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <TextBlock Text="Welcome to Snapnest" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:entities="clr-namespace:Snapnest.Core.Entities;assembly=Snapnest.Core">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header and Action Button -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="All Images" FontSize="28" FontWeight="SemiBold" 
+                       Foreground="{StaticResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+            
+            <Button Grid.Column="1" Content="Import Images" 
+                    Command="{Binding ImportImagesCommand}"
+                    Background="{StaticResource AccentBrush}" Foreground="White"
+                    Padding="16,8" BorderThickness="0" Cursor="Hand">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="6"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+
+        <!-- Image Gallery -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding ImportedImages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!-- WrapPanel allows items to wrap to the next line automatically -->
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type entities:ImageItem}">
+                        <Border Background="{StaticResource CardBackgroundBrush}" 
+                                CornerRadius="8" Padding="8" Margin="0,0,15,15"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                Width="180">
+                            <StackPanel>
+                                <!-- Thumbnail Image. DecodePixelWidth ensures we don't consume too much memory -->
+                                <Image Source="{Binding StoragePath}" Height="120" Stretch="UniformToFill" Margin="0,0,0,8"
+                                       RenderOptions.BitmapScalingMode="HighQuality">
+                                </Image>
+                                
+                                <TextBlock Text="{Binding FileName}" FontSize="12" 
+                                           Foreground="{StaticResource PrimaryTextBrush}" 
+                                           TextTrimming="CharacterEllipsis" Margin="0,0,0,8"/>
+                                           
+                                <Button Content="Delete" 
+                                        Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Background="#FFE0E0" Foreground="#D00000"
+                                        Padding="8,4" BorderThickness="0" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="4"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
