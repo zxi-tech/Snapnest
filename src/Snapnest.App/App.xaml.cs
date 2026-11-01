@@ -19,7 +19,11 @@ public partial class App : System.Windows.Application
     public App()
     {
         _host = Host.CreateDefaultBuilder()
-            .ConfigureLogging(logging => { logging.ClearProviders(); logging.AddDebug(); })
+            .ConfigureLogging(logging => 
+            { 
+                logging.ClearProviders(); 
+                logging.AddDebug(); 
+            })
             .ConfigureServices((context, services) =>
             {
                 string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -27,37 +31,49 @@ public partial class App : System.Windows.Application
                 Directory.CreateDirectory(appDataFolder);
                 string dbPath = Path.Combine(appDataFolder, "snapnest.db");
 
-                services.AddDbContext<SnapnestDbContext>(options => { options.UseSqlite($"Data Source={dbPath}"); });
-
+                services.AddDbContext<SnapnestDbContext>(options => 
+                { 
+                    options.UseSqlite($"Data Source={dbPath}"); 
+                });
+                
+                // Register Services
                 services.AddScoped<IClotheslineService, ClotheslineService>();
-
                 services.AddScoped<IImageService, ImageService>();
+                services.AddScoped<IScreenshotService, ScreenshotService>();
 
+                // Register ViewModels (Transient or Singleton as appropriate)
                 services.AddSingleton<MainViewModel>();
                 services.AddTransient<HomeViewModel>();
                 services.AddTransient<ClotheslinesViewModel>();
-                services.AddTransient<MainWindow>();
-            }).Build();
-    }
 
+                // Register Views
+                services.AddTransient<MainWindow>();
+            })
+            .Build();
+    }
+    
     protected override async void OnStartup(StartupEventArgs e)
     {
         await _host.StartAsync();
-
+        
         using (var scope = _host.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<SnapnestDbContext>();
-            await dbContext.Database.MigrateAsync();
+            await dbContext.Database.MigrateAsync(); 
         }
-
+        
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
+        
         base.OnStartup(e);
     }
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        using (_host) { await _host.StopAsync(TimeSpan.FromSeconds(5)); }
+        using (_host) 
+        { 
+            await _host.StopAsync(TimeSpan.FromSeconds(5)); 
+        }
         base.OnExit(e);
     }
 }

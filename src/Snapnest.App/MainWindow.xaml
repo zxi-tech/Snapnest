@@ -19,22 +19,28 @@
                 BorderThickness="0,0,1,0">
             <StackPanel Margin="0,20,0,0">
                 <TextBlock Text="Snapnest"
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource PrimaryTextBrush}"
-                        Margin="24,0,0,30"/>
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryTextBrush}"
+                           Margin="24,0,0,30"/>
                 <Button Content="Home"
                         Command="{Binding NavigateToHomeCommand}"
                         Style="{StaticResource SidebarButtonStyle}"/>
                 <Button Content="My Clotheslines"
                         Command="{Binding NavigateToClotheslinesCommand}"
                         Style="{StaticResource SidebarButtonStyle}"/>
+                <Button Content="📸 Take Screenshot"
+                        Command="{Binding TakeScreenshotCommand}"
+                        Style="{StaticResource SidebarButtonStyle}"
+                        Margin="8,20,8,4"
+                        Foreground="{StaticResource AccentBrush}"
+                        FontWeight="SemiBold"/>
             </StackPanel>
         </Border>
 
         <!-- Content Pages -->
         <ContentControl Grid.Column="1"
-                Content="{Binding CurrentViewModel}"
-                Margin="20"/>
+                        Content="{Binding CurrentViewModel}"
+                        Margin="20"/>
     </Grid>
 </Window>
